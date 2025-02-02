@@ -221,17 +221,3 @@ class JupiterClient:
             raise TransactionError(f"API request failed: {str(e)}")
         except Exception as e:
             raise TransactionError(f"Trade failed: {str(e)}")
-
-# Example usage
-if __name__ == "__main__":
-    try:
-        jupiter = JupiterClient()
-        jupiter.make_trade(
-            jupiter.TOKEN_ADDRESSES['SOL'], 
-            jupiter.TOKEN_ADDRESSES['USDC'], 
-            amount=str(int(0.0005 * 1_000_000_000))
-        )
-    except TransactionError as e:
-        print(f"Transaction failed: {str(e)}")
-    except Exception as e:
-        print(f"Unexpected error: {str(e)}")
