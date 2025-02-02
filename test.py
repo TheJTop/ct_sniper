@@ -11,8 +11,14 @@ jupiter = JupiterClient()
 
 
 # execute a full swap
-result = jupiter.execute_swap(
-    jupiter.TOKEN_ADDRESSES['SOL'],
-    jupiter.TOKEN_ADDRESSES['USDC'],
-    "10000000"  # 0.01 SOL
+# result = jupiter.execute_swap(
+#     jupiter.TOKEN_ADDRESSES['SOL'],
+#     jupiter.TOKEN_ADDRESSES['USDC'],
+#     "5000000"  # 0.01 SOL
+# )
+jupiter = JupiterClient()
+jupiter.make_trade(
+    jupiter.TOKEN_ADDRESSES['SOL'], 
+    jupiter.TOKEN_ADDRESSES['USDC'], 
+    amount=str(int(0.0005 * 1_000_000_000))
 )
