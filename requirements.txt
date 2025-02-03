@@ -3,3 +3,7 @@ solders
 base58 
 python-dotenv 
 requests
+
+#Nitter stuff
+beautifulsoup4
+selenium
