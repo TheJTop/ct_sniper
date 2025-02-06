@@ -3,6 +3,7 @@ from webscraper import WebScraper
 from typing import List, Optional
 from urllib.parse import quote
 
+jupiter = JupiterClient()
 
 def extract_ca(text):
     # Replace non-alphanumeric characters with spaces
@@ -34,14 +35,19 @@ def find_new_ca(usernames, timeout):
         while True:
             content = scraper.scrape_page(url)
             new_cas = extract_ca(content)
-            if any(ca in old_cas for ca in new_cas):
-                break
-
-    # Find new CAS that aren't in the old CAS
-    return [ca for ca in new_cas if ca not in old_cas]
-
+            print(new_cas)
+            found_new_cas = [ca for ca in new_cas if ca not in old_cas]
+                        
+            # If we found any new CAs, return them
+            if found_new_cas:
+                return found_new_cas
+            
 
 def make_trade(jupiter, input_token, output_token, amount, slippage_bps = 0.2):
 
-
+    jupiter.make_trade(
+    jupiter.TOKEN_ADDRESSES['SOL'], 
+    jupiter.TOKEN_ADDRESSES['USDC'], 
+    amount=str(int(0.0005 * 1_000_000_000))
+)
 
