@@ -1,5 +1,5 @@
-from utils import JupiterClient
-from webscraper import WebScraper
+from utils.jupiter import JupiterClient
+from utils.webscraper import WebScraper
 from typing import List, Optional
 from urllib.parse import quote
 

@@ -1,4 +1,4 @@
-from utils import JupiterClient
+from utils.jupiter import JupiterClient
 
 jupiter = JupiterClient()
 
@@ -10,9 +10,24 @@ jupiter = JupiterClient()
 )'''
 
 
-jupiter = JupiterClient()
-jupiter.make_trade(
-    jupiter.TOKEN_ADDRESSES['SOL'], 
-    jupiter.TOKEN_ADDRESSES['USDC'], 
-    amount=str(int(0.0005 * 1_000_000_000))
+# jupiter = JupiterClient()
+# jupiter.make_trade(
+#     jupiter.TOKEN_ADDRESSES['SOL'], 
+#     jupiter.TOKEN_ADDRESSES['USDC'], 
+#     amount=str(int(0.0005 * 1_000_000_000))
+# )
+x = jupiter.get_market_info(jupiter.TOKEN_ADDRESSES['SOL'], jupiter.TOKEN_ADDRESSES['USDC'], amount = str(int(500000 * 1_000_000_000)))
+
+
+
+import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+NTFY_CODE = os.getenv('NTFY_CODE')
+
+requests.post(
+    f"https://ntfy.sh/{NTFY_CODE}",
+    data=x
 )

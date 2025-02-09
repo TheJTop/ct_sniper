@@ -127,7 +127,6 @@ class JupiterClient:
             print(f"Error getting priority fees: {e}")
             return 2000  # Default fallback
 
-
     def make_trade(self, input_token: str, output_token: str, amount: str, slippage_bps: int = 50):
         """
         Execute a trade with enhanced error handling and transaction monitoring
@@ -221,3 +220,81 @@ class JupiterClient:
             raise TransactionError(f"API request failed: {str(e)}")
         except Exception as e:
             raise TransactionError(f"Trade failed: {str(e)}")
+        
+    def get_market_info(self, input_token: str, output_token: str, amount: str) -> dict:
+        """
+        Get market information including liquidity and price impact for a potential trade
+        Returns dictionary with market details
+        """
+        try:
+            quote_url = f"{self.api_url}/quote"
+            quote_params = {
+                "inputMint": input_token,
+                "outputMint": output_token,
+                "amount": amount,
+                "slippageBps": 50  # Default slippage
+            }
+            
+            quote_response = requests.get(quote_url, params=quote_params)
+            quote_response.raise_for_status()
+            quote_data = quote_response.json()
+            
+            if not quote_data:
+                raise TransactionError("Received empty quote response from Jupiter API")
+            
+            # Extract relevant information
+            market_info = {
+                'input_amount': quote_data.get('inAmount'),
+                'output_amount': quote_data.get('outAmount'),
+                'price_impact_pct': quote_data.get('priceImpactPct'),
+                'market_infos': quote_data.get('marketInfos', []),
+                'other_amount_threshold': quote_data.get('otherAmountThreshold'),
+                'swap_mode': quote_data.get('swapMode')
+            }
+            
+            # Calculate additional metrics
+            if market_info['market_infos']:
+                total_liquidity = sum(
+                    float(info.get('liquiditySource', 0)) 
+                    for info in market_info['market_infos']
+                )
+                market_info['total_liquidity'] = total_liquidity
+                
+            return market_info
+            
+        except requests.exceptions.RequestException as e:
+            print(f"API request failed: {str(e)}")
+            if hasattr(e, 'response'):
+                print(f"Response text: {e.response.text}")
+            raise TransactionError(f"Failed to get market info: {str(e)}")
+        except Exception as e:
+            raise TransactionError(f"Error getting market info: {str(e)}")
+
+    def check_price_impact(self, input_token: str, amount: str) -> None:
+        """
+        Check price impact for a given amount of input token to trade against SOL
+        Prints detailed market analysis
+        """
+        try:
+            # If input is SOL, we'll check against USDC, otherwise check against SOL
+            output_token = self.TOKEN_ADDRESSES['USDC'] if input_token == self.TOKEN_ADDRESSES['SOL'] else self.TOKEN_ADDRESSES['SOL']
+            
+            market_info = self.get_market_info(input_token, output_token, amount)
+            
+            print("\nMarket Analysis:")
+            print(f"Input Amount: {market_info['input_amount']}")
+            print(f"Output Amount: {market_info['output_amount']}")
+            print(f"Price Impact: {market_info['price_impact_pct']}%")
+            
+            if market_info.get('total_liquidity'):
+                print(f"Total Liquidity: {market_info['total_liquidity']}")
+                
+            if market_info['market_infos']:
+                print("\nRouting Details:")
+                for idx, route in enumerate(market_info['market_infos'], 1):
+                    print(f"\nRoute {idx}:")
+                    print(f"Liquidity Source: {route.get('liquiditySource', 'Unknown')}")
+                    print(f"Ammkey: {route.get('ammKey', 'Unknown')}")
+                    
+        except Exception as e:
+            print(f"Error checking price impact: {str(e)}")
