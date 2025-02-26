@@ -4,6 +4,7 @@ base58
 python-dotenv 
 requests
 
-#Nitter stuff
+#Scraping stuff
 beautifulsoup4
 selenium
+chromedriver-autoinstaller
