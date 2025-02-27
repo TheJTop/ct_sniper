@@ -25,7 +25,7 @@ def find_new_ca(usernames, timeout):
     # Build the search query
     query = " OR ".join(f"from:{username}" for username in usernames)
     encoded_query = quote(query)
-    url = f"https://nitter.net/search?f=tweets&q={encoded_query}"
+    url = f"https://nitter.space/search?f=tweets&q={encoded_query}"
     
     with WebScraper() as scraper:
         content = scraper.scrape_page(url)
@@ -48,6 +48,6 @@ def make_trade(jupiter, input_token, output_token, amount, slippage_bps = 0.2):
     jupiter.make_trade(
     jupiter.TOKEN_ADDRESSES['SOL'], 
     jupiter.TOKEN_ADDRESSES['USDC'], 
-    amount=str(int(0.0005 * 1_000_000_000))
+    amount=str(int(amount * 1_000_000_000))
 )
 
