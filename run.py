@@ -6,7 +6,7 @@ NTFY_CODE = os.getenv('NTFY_CODE')
 HANDLES = ['elonmusk', 'cloutdotme', 'pasternak', 'kanyewest', 'realDonaldTrump', 'the_jtop']
 TURN_OFF = 10 #Hours
 TRIGGER_WORD = '' #If we want to tweet a word and make it stop
-AMOUNT = 4 #In SOL
+AMOUNT = 0.0004 #In SOL
 
 #To Do:
 # Implement a max - market-cap feature
