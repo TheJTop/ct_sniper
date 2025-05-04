@@ -3,17 +3,16 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 NTFY_CODE = os.getenv('NTFY_CODE')
-HANDLES = ['elonmusk', 'cloutdotme', 'pasternak', 'kanyewest', 'realDonaldTrump', 'the_jtop']
+HANDLES = ['elonmusk', 'JohnLeeKa_Chiu', 'pasternak', 'kanyewest', 'realDonaldTrump', 'the_jtop']
 TURN_OFF = 10 #Hours
 TRIGGER_WORD = '' #If we want to tweet a word and make it stop
-AMOUNT = 0.0004 #In SOL
+AMOUNT = 2 #In SOL
 
 #To Do:
 # Implement a max - market-cap feature
 # Implement a volume feature
 # Implement scenario when multiple CAs are found
 # Implement trigger word
-
 
 #Set SLIPAGE equal to ~ 2x liquidity? And if price impact is 
 
